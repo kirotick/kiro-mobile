@@ -28,12 +28,16 @@ The same code runs in a browser (Expo web, via `react-native-web`).
 On the web the login token is kept in the browser's `localStorage` (no secure store exists in browsers), so sign out on shared computers. Serve the site over https only.
 
 ## Publishing to Google Play and the App Store
-You do this part (it needs your own developer accounts and their review):
-1. Accounts: Google Play Console (one-time fee) and Apple Developer Program (yearly fee).
-2. In `app.json` set your own `android.package` and `ios.bundleIdentifier`, plus the app name, icon and splash image.
-3. Build: `npx eas build --platform all`. Submit: `npx eas submit` (needs your store credentials; never commit them).
-4. Both stores require a privacy policy address and a description of the data the app handles (sales and staff data from your own server, login token on the device).
-5. Once approved, copy the public store addresses into **`APP_LINKS` in `kiro.html`** (website) and **`STORE_LINKS` in `demo/page.template.html`**. Until then both show "Coming soon" badges. Only addresses on `play.google.com` or `apps.apple.com` are accepted.
+Ready in this repository: app ID `in.kiro.admin` (permanent), version 1.0.0, KIRO icon, Android adaptive icon, splash screen, `eas.json` build profiles, no extra Android permissions, iOS export compliance answered. `npm test` checks these store rules. Listing text, Data safety and App Privacy answers: [store/STORE_LISTING.md](store/STORE_LISTING.md).
+
+Still needed, in this order:
+1. **Owner:** Apple Developer Program (yearly fee) and Google Play Console (one-time fee) accounts, and a D-U-N-S number to enrol as an organisation.
+2. **Owner:** fill in the legal name, address and privacy email on the website's privacy and delete-account pages (kiro-web).
+3. Deploy the KIRO API (kiro-backend) over https and create a demo shop login for the store reviewers.
+4. `npm install -g eas-cli`, `eas login` (owner's Expo account), `eas init` (adds the project ID to app.json), then `eas env:create --environment production --name EXPO_PUBLIC_API_URL --value https://<api address> --visibility plaintext` (same for `preview`).
+5. Test build on a phone: `eas build --profile preview --platform android` (installable .apk). iPhone test builds need the Apple account.
+6. Store builds: `eas build --profile production --platform all`, then `eas submit --profile production` (Android goes to the internal testing track as a draft). Store passwords and keys stay in EAS and the store consoles, never in this repository.
+7. Once approved, copy the public store addresses into the website's app links and **`STORE_LINKS` in `demo/page.template.html`**. Only addresses on `play.google.com` or `apps.apple.com` are accepted.
 
 `demo/` holds the sample-data showcase page (the real screens with a fake in-browser API). It is for showing the app, not for production.
 
