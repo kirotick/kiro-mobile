@@ -3,9 +3,9 @@
 const test = require('node:test'); const assert = require('node:assert/strict');
 const path = require('path'); const Module = require('module');
 // esbuild comes from this app's devDependencies, or from the repo's QA tools (qa/node_modules) when the
-// app's own packages are not installed. (It used to be a fixed path that only existed on one computer.)
+// app's own packages are not installed (the kiro-qa-testing repo checked out next to this one).
 const esbuild = (() => {
-  try { return require('esbuild'); } catch (e) { return require(require.resolve('esbuild', { paths: [path.join(__dirname, '../../qa')] })); }
+  try { return require('esbuild'); } catch (e) { return require(require.resolve('esbuild', { paths: [path.join(__dirname, '../../kiro-qa-testing')] })); }
 })();
 const load = (f) => { const code = esbuild.buildSync({ entryPoints: [path.join(__dirname, '../src', f)], bundle: true, format: 'cjs', platform: 'node', write: false }).outputFiles[0].text;
   const m = new Module(f); m._compile(code, f); return m.exports; };
